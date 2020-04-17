@@ -1,16 +1,17 @@
-import { createBitcoinJsonRpc } from './index';
 import { jsonRpcCmd } from './json-rpc';
+import BitcoinJsonRpc from './BitcoinJsonRpc';
 
 jest.mock('delay');
+
 jest.mock('./json-rpc', () => ({
   jsonRpcCmd: jest.fn(),
 }));
 
 describe('bitcoin-json-rpc', () => {
-  const rpc = createBitcoinJsonRpc('https://localhost');
+  const rpc = new BitcoinJsonRpc('https://localhost');
 
   // When there's not enough funds there's no reason to retry
-  test('should not retry insufficient funds', () => {
+  it('should not retry insufficient funds', () => {
     expect.assertions(5);
 
     (jsonRpcCmd as jest.Mock).mockImplementationOnce(async (url: string, method: string, params: any) => {
@@ -28,7 +29,7 @@ describe('bitcoin-json-rpc', () => {
     });
   });
 
-  test('should retry getRawMempool', () => {
+  it('should retry getRawMempool', () => {
     expect.assertions(3);
 
     (jsonRpcCmd as jest.Mock)
@@ -48,7 +49,7 @@ describe('bitcoin-json-rpc', () => {
     });
   });
 
-  test('should retry send on ECONNREFUSED', () => {
+  it('should retry send on ECONNREFUSED', () => {
     expect.assertions(5);
 
     (jsonRpcCmd as jest.Mock)
@@ -67,6 +68,22 @@ describe('bitcoin-json-rpc', () => {
 
     return rpc.sendToAddress('1Bitcoin', '1.2').then((result) => {
       expect(result).toEqual('hash');
+    });
+  });
+
+  it('throw if getBalance returns an object', () => {
+    // expect.assertions(5);
+
+    (jsonRpcCmd as jest.Mock).mockImplementationOnce(async (url: string, method: string, params: any) => {
+      expect(url).toBe('https://localhost');
+      expect(method).toBe('getbalance');
+      expect(params).toEqual([]);
+
+      return { balance: 1 };
+    });
+
+    return rpc.getBalance().catch((error) => {
+      expect(error.executed).toBe(true);
     });
   });
 });
