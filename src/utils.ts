@@ -118,6 +118,7 @@ export const getWasExecutedFromError = (method: string, error: Error) => {
     /^Activating best chain/,
     /^Parsing Omni Layer transactions/,
     /^Upgrading/,
+    /^Error committing transaction/,
   ];
 
   if (notExecutedErrorMessages.some((_) => error.message.match(_) !== null)) {
