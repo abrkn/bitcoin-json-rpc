@@ -20,6 +20,14 @@ export const SendRawTransactionResultDecoder = t.string;
 
 export type SendRawTransactionResult = t.TypeOf<typeof SendRawTransactionResultDecoder>;
 
+export const FundRawTransactionResultDecoder = t.type({
+  hex: t.string,
+  fee: t.number,
+  changepos: t.number
+});
+
+export type FundRawTransactionResultDecoder = t.TypeOf<typeof FundRawTransactionResultDecoder>;
+
 export const CreateRawTransactionResultDecoder = t.string;
 
 export type CreateRawTransactionResult = t.TypeOf<typeof CreateRawTransactionResultDecoder>;
@@ -136,6 +144,10 @@ export type LiquidValidateAddressResult = t.TypeOf<typeof LiquidValidateAddressR
 export const GetBalanceResultDecoder = t.number;
 
 export type GetBalanceResult = t.TypeOf<typeof GetBalanceResultDecoder>;
+
+export const GenerateToAddressResultDecoder = t.array(t.string);
+
+export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;
 
 export const GetLiquidBalanceResultDecoder = t.record(t.string, t.number);
 

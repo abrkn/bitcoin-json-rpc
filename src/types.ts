@@ -2,4 +2,4 @@ export interface CreateBitcoinJsonRpcOptions {
   ancient?: boolean;
 }
 
-export type LiquidSendToAddressEstimateMode = 'UNSET' | 'ECONOMICAL' | 'CONSERVATIVE';
+export type BitcoinFeeEstimateMode = 'UNSET' | 'ECONOMICAL' | 'CONSERVATIVE';

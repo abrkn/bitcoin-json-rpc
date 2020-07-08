@@ -1,6 +1,6 @@
 import delay from 'delay';
 import createDebug from 'debug';
-import { CreateBitcoinJsonRpcOptions, LiquidSendToAddressEstimateMode } from './types';
+import { CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode } from './types';
 import { jsonRpcCmd } from './json-rpc';
 import { PURE_METHODS, getWasExecutedFromError, getShouldRetry, iotsDecode } from './utils';
 import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
@@ -157,6 +157,67 @@ export default class BitcoinJsonRpc {
   }
 
   // Arguments:
+  // 1. hexstring                          (string, required) The hex string of the raw transaction
+  // 2. options                            (json object, optional) for backward compatibility: passing in a true instead of an object will result in {"includeWatching":true}
+  //      {
+  //        "changeAddress": "str",        (string, optional, default=pool address) The bitcoin address to receive the change
+  //        "changePosition": n,           (numeric, optional, default=random) The index of the change output
+  //        "change_type": "str",          (string, optional, default=set by -changetype) The output type to use. Only valid if changeAddress is not specified. Options are "legacy", "p2sh-segwit", and "bech32".
+  //        "includeWatching": bool,       (boolean, optional, default=true for watch-only wallets, otherwise false) Also select inputs which are watch only.
+  //                                       Only solvable inputs can be used. Watch-only destinations are solvable if the public key and/or output script was imported,
+  //                                       e.g. with 'importpubkey' or 'importmulti' with the 'pubkeys' or 'desc' field.
+  //        "lockUnspents": bool,          (boolean, optional, default=false) Lock selected unspent outputs
+  //        "feeRate": amount,             (numeric or string, optional, default=not set: makes wallet determine the fee) Set a specific fee rate in BTC/kB
+  //        "subtractFeeFromOutputs": [    (json array, optional, default=empty array) A json array of integers.
+  //                                       The fee will be equally deducted from the amount of each specified output.
+  //                                       Those recipients will receive less bitcoins than you enter in their corresponding amount field.
+  //                                       If no outputs are specified here, the sender pays the fee.
+  //          vout_index,                  (numeric) The zero-based output index, before a change output is added.
+  //          ...
+  //        ],
+  //        "replaceable": bool,           (boolean, optional, default=wallet default) Marks this transaction as BIP125 replaceable.
+  //                                       Allows this transaction to be replaced by a transaction with higher fees
+  //        "conf_target": n,              (numeric, optional, default=wallet default) Confirmation target (in blocks)
+  //        "estimate_mode": "str",        (string, optional, default=UNSET) The fee estimate mode, must be one of:
+  //                                       "UNSET"
+  //                                       "ECONOMICAL"
+  //                                       "CONSERVATIVE"
+  //      }
+  // 3. iswitness                          (boolean, optional, default=depends on heuristic tests) Whether the transaction hex is a serialized witness transaction.
+  //                                       If iswitness is not present, heuristic tests will be used in decoding.
+  //                                       If true, only witness deserialization will be tried.
+  //                                       If false, only non-witness deserialization will be tried.
+  //                                       This boolean should reflect whether the transaction has inputs
+  //                                       (e.g. fully valid, or on-chain transactions), if known by the caller.
+  // Result:
+  // {
+  //   "hex":       "value", (string)  The resulting raw transaction (hex-encoded string)
+  //   "fee":       n,         (numeric) Fee in BTC the resulting transaction pays
+  //   "changepos": n          (numeric) The position of the added change output, or -1
+  // }
+  public async fundRawTransaction(
+    hex: string,
+    options: {
+      changeAddress?: string,
+      changePosition?: number,
+      change_type?: string,
+      includeWatching?: boolean,
+      lockUnspents?: boolean,
+      feeRate?: number,
+      subtractFeeFromOutputs?: number[],
+      replaceable?: boolean,
+      conf_target?: number,
+      estimate_mode?: BitcoinFeeEstimateMode
+    },
+    iswitness?: boolean
+  ) {
+    //@todo impl with iswitness option
+    return this.cmdWithRetryAndDecode(
+      decoders.FundRawTransactionResultDecoder, 'fundrawtransaction', hex, options
+    );
+  }
+
+  // Arguments:
   // 1. "address"            (string, required) The bitcoin address to send to.
   // 2. "amount"             (numeric or string, required) The amount in BTC to send. eg 0.1
   // 3. "comment"            (string, optional) A comment used to store what the transaction is for.
@@ -181,7 +242,7 @@ export default class BitcoinJsonRpc {
     subtractFeeFromAmount: boolean | null,
     replaceable: boolean | null,
     confTarget: number | null,
-    estimateMode: LiquidSendToAddressEstimateMode | null,
+    estimateMode: BitcoinFeeEstimateMode | null,
     asset: string | null
   ) {
     return this.cmdWithRetryAndDecode(
@@ -245,6 +306,10 @@ export default class BitcoinJsonRpc {
 
   public async getBalance() {
     return this.cmdWithRetryAndDecode(decoders.GetBalanceResultDecoder, 'getbalance');
+  }
+
+  public async generateToAddress(nblocks: number, address:string) {
+    return this.cmdWithRetryAndDecode(decoders.GenerateToAddressResultDecoder, 'generatetoaddress', nblocks, address);
   }
 
   public async getLiquidBalanceForAsset(
