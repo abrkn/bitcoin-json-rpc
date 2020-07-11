@@ -11,6 +11,7 @@
   },
   "keywords": [],
   "author": "Andreas Brekken <andreas@brekken.com>",
+  "repository": "github:abrkn/bitcoin-json-rpc",
   "license": "MIT",
   "devDependencies": {
     "@types/debug": "4.1.5",
