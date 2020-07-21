@@ -102,8 +102,25 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.SendRawTransactionResultDecoder, 'sendrawtransaction', hex);
   }
 
-  public async sendToAddress(address: string, amount: string) {
-    return this.cmdWithRetryAndDecode(decoders.SendToAddressResultDecoder, 'sendtoaddress', address, amount);
+  // https://bitcoin-rpc.github.io/en/doc/0.17.99/rpc/wallet/sendtoaddress/
+  public async sendToAddress(address: string, amount: string, comment?: string, commentTo?: string, subtractFeeFromAmount?: boolean, replaceable?: boolean) {
+    const params: any[] = [address, amount];
+
+    if (replaceable !== undefined) {
+      // Argument #6
+      params.push(comment ?? '', commentTo ?? '', subtractFeeFromAmount ?? false, replaceable);
+    } else if (subtractFeeFromAmount !== undefined) {
+      // Argument #5
+      params.push(comment ?? '', commentTo ?? '', subtractFeeFromAmount);
+    } else if (commentTo !== undefined) {
+      // Argument #4
+      params.push(comment ?? '', commentTo);
+    } else if (commentTo) {
+      // Argument #3 
+      params.push(comment);
+    }
+
+    return this.cmdWithRetryAndDecode(decoders.SendToAddressResultDecoder, 'sendtoaddress', ...params);
   }
 
   public async signRawTransactionWithWallet(hex: string) {

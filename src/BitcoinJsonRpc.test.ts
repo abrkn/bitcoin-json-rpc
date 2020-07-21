@@ -86,4 +86,38 @@ describe('bitcoin-json-rpc', () => {
       expect(error.executed).toBe(true);
     });
   });
+
+  describe('sendToAddress', () => {
+    it('should fall back to defaults', async () => {
+      (jsonRpcCmd as jest.Mock)
+        .mockImplementationOnce(async (url: string, method: string, params: any) => {
+          expect(url).toBe('https://localhost');
+          expect(method).toBe('sendtoaddress');
+          expect(params).toEqual(['1address', '1.01', '', '', false, true]);
+
+          return 'hash';
+        })
+        .mockImplementationOnce(async (url: string, method: string, params: any) => {
+          expect(url).toBe('https://localhost');
+          expect(method).toBe('sendtoaddress');
+          expect(params).toEqual(['1address', '1.01', 'something', 'someone']);
+
+          return 'hash';
+        })
+        .mockImplementationOnce(async (url: string, method: string, params: any) => {
+          expect(url).toBe('https://localhost');
+          expect(method).toBe('sendtoaddress');
+          expect(params).toEqual(['1address', '1.01', '', 'someone', true, true]);
+
+          return 'hash';
+        });
+
+      let result = await rpc.sendToAddress('1address', '1.01', undefined, undefined, undefined, true);
+      expect(result).toBe('hash');
+      result = await rpc.sendToAddress('1address', '1.01', 'something', 'someone');
+      expect(result).toBe('hash');
+      result = await rpc.sendToAddress('1address', '1.01', undefined, 'someone', true, true);
+      expect(result).toBe('hash');
+    });
+  });
 });
