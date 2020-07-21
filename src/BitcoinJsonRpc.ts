@@ -98,7 +98,6 @@ export default class BitcoinJsonRpc {
     }
   }
 
-
   public async sendRawTransaction(hex: string) {
     return this.cmdWithRetryAndDecode(decoders.SendRawTransactionResultDecoder, 'sendrawtransaction', hex);
   }
