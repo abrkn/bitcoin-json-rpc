@@ -107,23 +107,17 @@ export default class BitcoinJsonRpc {
   public async sendToAddress(address: string, amount: string, comment?: string, commentTo?: string, subtractFeeFromAmount?: boolean, replaceable?: boolean) {
     const params: any[] = [address, amount];
 
-    // Argument #6
     if (replaceable !== undefined) {
+      // Argument #6
       params.push(comment ?? '', commentTo ?? '', subtractFeeFromAmount ?? false, replaceable);
-    }
-
-    // Argument #5
-    if (subtractFeeFromAmount !== undefined) {
+    } else if (subtractFeeFromAmount !== undefined) {
+      // Argument #5
       params.push(comment ?? '', commentTo ?? '', subtractFeeFromAmount);
-    }
-
-    // Argument #4
-    if (commentTo !== undefined) {
+    } else if (commentTo !== undefined) {
+      // Argument #4
       params.push(comment ?? '', commentTo);
-    }
-
-    // Argument #3
-    if (commentTo) {
+    } else if (commentTo) {
+      // Argument #3 
       params.push(comment);
     }
 
