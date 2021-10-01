@@ -328,6 +328,10 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.GetBalanceResultDecoder, 'getbalance');
   }
 
+  public async getBalances() {
+    return this.cmdWithRetryAndDecode(decoders.GetBalancesResultDecoder, 'getbalances');
+  }
+
   public async generateToAddress(nblocks: number, address:string) {
     return this.cmdWithRetryAndDecode(decoders.GenerateToAddressResultDecoder, 'generatetoaddress', nblocks, address);
   }

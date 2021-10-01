@@ -145,6 +145,25 @@ export const GetBalanceResultDecoder = t.number;
 
 export type GetBalanceResult = t.TypeOf<typeof GetBalanceResultDecoder>;
 
+export const GetBalancesResultDecoder = t.type({
+    mine: t.type({
+        trusted: t.number,
+        untrusted_pending: t.number,
+        immature: t.number,
+        used: t.union([t.number, t.undefined])
+    }),
+    watchonly: t.union([
+        t.type({
+            trusted: t.number,
+            untrusted_pending: t.number,
+            immature: t.number,
+        }),
+        t.undefined]
+    )
+});
+
+export type GetBalancesResult = t.TypeOf<typeof AncientGetInfoResultDecoder>;
+
 export const GenerateToAddressResultDecoder = t.array(t.string);
 
 export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;

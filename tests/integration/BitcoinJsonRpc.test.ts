@@ -28,4 +28,15 @@ describe('bitcoin-json-rpc-integration', () => {
         expect(result).toHaveLength(44)
     })
   });
+
+  it('check getBalances', () => {
+    rpc.getBalances().then((result) => {
+        expect(result.mine).toBeDefined()
+        expect(result.mine.trusted).toBeDefined()
+        expect(result.mine.immature).toBeDefined()
+        expect(result.mine.untrusted_pending).toBeDefined()
+        expect(result.mine.used).toBeUndefined()
+        expect(result.watchonly).toBeUndefined()
+    })
+  });
 });
