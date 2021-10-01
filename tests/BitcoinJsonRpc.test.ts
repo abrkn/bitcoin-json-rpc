@@ -1,9 +1,9 @@
-import { jsonRpcCmd } from './json-rpc';
-import BitcoinJsonRpc from './BitcoinJsonRpc';
+import { jsonRpcCmd } from '../src';
+import BitcoinJsonRpc from '../src/BitcoinJsonRpc';
 
 jest.mock('delay');
 
-jest.mock('./json-rpc', () => ({
+jest.mock('../src/json-rpc', () => ({
   jsonRpcCmd: jest.fn(),
 }));
 

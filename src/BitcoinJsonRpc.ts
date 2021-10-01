@@ -1,6 +1,6 @@
 import delay from 'delay';
 import createDebug from 'debug';
-import { CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode } from './types';
+import {CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode, AddressTypes} from './types';
 import { jsonRpcCmd } from './json-rpc';
 import { PURE_METHODS, getWasExecutedFromError, getShouldRetry, iotsDecode } from './utils';
 import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
@@ -317,14 +317,11 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.LiquidValidateAddressResultDecoder, 'validateaddress', address);
   }
 
-  public async getNewAddress(label:string="", type?:string) {
-      const args: any[] = [label];
-
-      if (type !== undefined) {
-        args.push(type);
-      }
-
-    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', ...args);
+  public async getNewAddress(options: {
+    label?: string,
+    type?: AddressTypes
+  } = {}) {
+    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', options.label, options.type);
   }
 
   public async getBalance() {
