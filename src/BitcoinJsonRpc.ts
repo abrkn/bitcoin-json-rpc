@@ -116,7 +116,7 @@ export default class BitcoinJsonRpc {
       // Argument #4
       params.push(comment ?? '', commentTo);
     } else if (commentTo) {
-      // Argument #3 
+      // Argument #3
       params.push(comment);
     }
 
@@ -317,8 +317,14 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.LiquidValidateAddressResultDecoder, 'validateaddress', address);
   }
 
-  public async getNewAddress() {
-    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress');
+  public async getNewAddress(label:string="", type?:string) {
+      const args: any[] = [label];
+
+      if (type !== undefined) {
+        args.push(type);
+      }
+
+    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', ...args);
   }
 
   public async getBalance() {
