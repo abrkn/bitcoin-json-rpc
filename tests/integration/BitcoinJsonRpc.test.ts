@@ -1,6 +1,7 @@
 import BitcoinJsonRpc from './../../src/BitcoinJsonRpc';
-const tmp = require('temporary');
 require('dotenv').config()
+import tempy from 'tempy';
+const randomstring = require("randomstring");
 
 describe('bitcoin-json-rpc-integration', () => {
     const url = process.env.RPC_PROTOCOL+'://'+process.env.RPC_USERNAME
@@ -9,26 +10,38 @@ describe('bitcoin-json-rpc-integration', () => {
         +':'+process.env.RPC_REGTEST_PORT;
     const rpc = new BitcoinJsonRpc(url);
 
-  it('check getNewAddress', () => {
-    rpc.getNewAddress({label:"test_label", type:'bech32'}).then((result) => {
-        expect(result).toHaveLength(44)
+    describe('getNewAddress', () => {
+        it('test_label_bech32', () => {
+            rpc.getNewAddress({label: "test_label", type: 'bech32'}).then((result) => {
+                expect(result).toHaveLength(44)
+            })
+        });
+        it('bech32', () => {
+            rpc.getNewAddress({type: "bech32"}).then((result) => {
+                expect(result).toHaveLength(44)
+            })
+        });
+        it('p2sh-segwit', () => {
+            rpc.getNewAddress({type: "p2sh-segwit"}).then((result) => {
+                expect(result).toHaveLength(35)
+            })
+        });
+        it('legacy', () => {
+            rpc.getNewAddress({type: "legacy"}).then((result) => {
+                expect(result).toHaveLength(34)
+            })
+        });
+        it('test_label', () => {
+            rpc.getNewAddress({label: "test_label"}).then((result) => {
+                expect(result).toHaveLength(44)
+            })
+        });
+        it('default arguments: label="" type=bech32', () => {
+            rpc.getNewAddress().then((result) => {
+                expect(result).toHaveLength(44)
+            })
+        });
     })
-    rpc.getNewAddress({type:"bech32"}).then((result) => {
-        expect(result).toHaveLength(44)
-    })
-    rpc.getNewAddress({type:"p2sh-segwit"}).then((result) => {
-        expect(result).toHaveLength(35)
-    })
-    rpc.getNewAddress({type:"legacy"}).then((result) => {
-        expect(result).toHaveLength(34)
-    })
-    rpc.getNewAddress({label:"test_label"}).then((result) => {
-        expect(result).toHaveLength(44)
-    })
-    rpc.getNewAddress().then((result) => {
-        expect(result).toHaveLength(44)
-    })
-  });
 
   it('check getBalances', () => {
     rpc.getBalances().then((result) => {
@@ -54,13 +67,36 @@ describe('bitcoin-json-rpc-integration', () => {
   });
 
   it('check loadWallet', () => {
-    rpc.unloadWallet("ksh2", null).then((result) => {
-        expect(result.warning).toBe("");
-    }).then(() => {
-        rpc.loadWallet("ksh2", null).then((result) => {
-            expect(result.name).toBe("ksh2");
+    const wallet_name = randomstring.generate(10)
+    rpc.createWallet(wallet_name).then((result) => {
+        rpc.unloadWallet(result.name, null).then((result) => {
             expect(result.warning).toBe("");
+        }).then(() => {
+            rpc.loadWallet(result.name, null).then((result) => {
+                expect(result.name).toBe(wallet_name);
+                expect(result.warning).toBe("");
+            })
         })
     })
   });
+
+    describe('Create Wallet', () => {
+        const options = {
+            disable_private_keys: false,
+            blank: false,
+            passphrase: null,
+            avoid_reuse: true,
+            descriptors: false,
+            load_on_startup: true,
+            external_signer: false
+        }
+
+        it('default', () => {
+            const wallet_name = randomstring.generate(10)
+            rpc.createWallet(wallet_name).then((result) => {
+                expect(result.name).toBe(wallet_name);
+                expect(result.warning).toBe("");
+            })
+        });
+    })
 });

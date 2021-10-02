@@ -321,7 +321,7 @@ export default class BitcoinJsonRpc {
     label?: string,
     type?: AddressTypes
   } = {}) {
-    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', options.label, options.type);
+    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', options);
   }
 
   public async getBalance() {
@@ -338,6 +338,39 @@ export default class BitcoinJsonRpc {
 
   public async listWallets() {
     return this.cmdWithRetryAndDecode(decoders.GetListWalletsResultDecoder, 'listwallets');
+  }
+
+  // Arguments:
+  // 1. wallet_name             (string, required) The name for the new wallet. If this is a path, the wallet will be created at the path location.
+  // 2. disable_private_keys    (boolean, optional, default=false) Disable the possibility of private keys (only watchonlys are possible in this mode).
+  // 3. blank                   (boolean, optional, default=false) Create a blank wallet. A blank wallet has no keys or HD seed. One can be set using sethdseed.
+  // 4. passphrase              (string, optional) Encrypt the wallet with this passphrase.
+  // 5. avoid_reuse             (boolean, optional, default=false) Keep track of coin reuse, and treat dirty and clean coins differently with privacy considerations in mind.
+  // 6. descriptors             (boolean, optional, default=false) Create a native descriptor wallet. The wallet will use descriptors internally to handle address creation
+  // 7. load_on_startup         (boolean, optional) Save wallet name to persistent settings and load on startup. True to add wallet to startup list, false to remove, null to leave unchanged.
+  // 8. external_signer         (boolean, optional, default=false) Use an external signer such as a hardware wallet. Requires -signer to be configured. Wallet creation will fail if keys cannot be fetched. Requires disable_private_keys and descriptors set to true.
+  public async createWallet(
+      wallet_name:string,
+      options: {
+        disable_private_keys?: boolean | false,
+        blank?: boolean | false,
+        passphrase?: string | null,
+        avoid_reuse?: boolean | false,
+        descriptors?: boolean | false,
+        load_on_startup?: boolean | false,
+        external_signer?: boolean | false
+      } = {}
+  ) {
+    const args: any[] = [wallet_name];
+    args.push(options.disable_private_keys)
+    args.push(options.blank)
+    args.push(options.passphrase)
+    args.push(options.avoid_reuse)
+    args.push(options.descriptors)
+    args.push(options.load_on_startup)
+    args.push(options.external_signer)
+
+    return this.cmdWithRetryAndDecode(decoders.GetCreateWalletsResultDecoder, 'createwallet', ...args);
   }
 
   public async loadWallet(filename:string, load_on_startup:boolean | null = null) {
