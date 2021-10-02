@@ -142,7 +142,6 @@ export const LiquidValidateAddressResultDecoder = t.type({
 export type LiquidValidateAddressResult = t.TypeOf<typeof LiquidValidateAddressResultDecoder>;
 
 export const GetBalanceResultDecoder = t.number;
-
 export type GetBalanceResult = t.TypeOf<typeof GetBalanceResultDecoder>;
 
 export const GetBalancesResultDecoder = t.type({
@@ -161,8 +160,10 @@ export const GetBalancesResultDecoder = t.type({
         t.undefined]
     )
 });
+export type GetBalancesResult = t.TypeOf<typeof GetBalancesResultDecoder>;
 
-export type GetBalancesResult = t.TypeOf<typeof AncientGetInfoResultDecoder>;
+export const GetListWalletsResultDecoder = t.array(t.string);
+export type GetListWalletsResultOutput = t.TypeOf<typeof GetListWalletsResultDecoder>;
 
 export const GenerateToAddressResultDecoder = t.array(t.string);
 

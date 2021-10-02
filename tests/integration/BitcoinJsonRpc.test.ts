@@ -39,4 +39,10 @@ describe('bitcoin-json-rpc-integration', () => {
         expect(result.watchonly).toBeUndefined()
     })
   });
+
+  it('check listWallets', () => {
+    rpc.listWallets().then((result) => {
+        expect(Array.isArray(result)).toBe(true);
+    })
+  });
 });
