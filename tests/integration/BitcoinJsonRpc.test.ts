@@ -45,4 +45,10 @@ describe('bitcoin-json-rpc-integration', () => {
         expect(Array.isArray(result)).toBe(true);
     })
   });
+
+  it('check listLabels', () => {
+    rpc.listLabels().then((result) => {
+        expect(Array.isArray(result)).toBe(true);
+    })
+  });
 });

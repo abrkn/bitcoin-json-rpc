@@ -162,8 +162,11 @@ export const GetBalancesResultDecoder = t.type({
 });
 export type GetBalancesResult = t.TypeOf<typeof GetBalancesResultDecoder>;
 
+export const GetListLabelsResultDecoder = t.array(t.string);
+export type GetListLabelsResult = t.TypeOf<typeof GetListLabelsResultDecoder>;
+
 export const GetListWalletsResultDecoder = t.array(t.string);
-export type GetListWalletsResultOutput = t.TypeOf<typeof GetListWalletsResultDecoder>;
+export type GetListWalletsResult = t.TypeOf<typeof GetListWalletsResultDecoder>;
 
 export const GenerateToAddressResultDecoder = t.array(t.string);
 
