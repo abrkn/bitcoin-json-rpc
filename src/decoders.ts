@@ -168,6 +168,17 @@ export type GetListLabelsResult = t.TypeOf<typeof GetListLabelsResultDecoder>;
 export const GetListWalletsResultDecoder = t.array(t.string);
 export type GetListWalletsResult = t.TypeOf<typeof GetListWalletsResultDecoder>;
 
+export const GetLoadWalletsResultDecoder = t.type({
+    name: t.string,   // (string) The wallet name if loaded successfully.
+    warning: t.string // (string) Warning message if wallet was not loaded cleanly.
+});
+export type GetLoadWalletsResult = t.TypeOf<typeof GetLoadWalletsResultDecoder>;
+
+export const GetUnLoadWalletsResultDecoder = t.type({
+    warning: t.string // (string) Warning message if wallet was not loaded cleanly.
+});
+export type GetUnLoadWalletsResult = t.TypeOf<typeof GetUnLoadWalletsResultDecoder>;
+
 export const GenerateToAddressResultDecoder = t.array(t.string);
 
 export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;

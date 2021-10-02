@@ -340,8 +340,12 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.GetListWalletsResultDecoder, 'listwallets');
   }
 
-  public async loadWallet() {
-    return this.cmdWithRetryAndDecode(decoders.GetListWalletsResultDecoder, 'listwallets');
+  public async loadWallet(filename:string, load_on_startup:boolean | null = null) {
+    return this.cmdWithRetryAndDecode(decoders.GetLoadWalletsResultDecoder, 'loadwallet', filename, load_on_startup);
+  }
+
+  public async unloadWallet(wallet_name:string, load_on_startup:boolean | null = null) {
+    return this.cmdWithRetryAndDecode(decoders.GetUnLoadWalletsResultDecoder, 'unloadwallet', wallet_name, load_on_startup);
   }
 
   public async generateToAddress(nblocks: number, address:string) {

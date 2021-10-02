@@ -1,4 +1,5 @@
 import BitcoinJsonRpc from './../../src/BitcoinJsonRpc';
+const tmp = require('temporary');
 require('dotenv').config()
 
 describe('bitcoin-json-rpc-integration', () => {
@@ -49,6 +50,17 @@ describe('bitcoin-json-rpc-integration', () => {
   it('check listLabels', () => {
     rpc.listLabels().then((result) => {
         expect(Array.isArray(result)).toBe(true);
+    })
+  });
+
+  it('check loadWallet', () => {
+    rpc.unloadWallet("ksh2", null).then((result) => {
+        expect(result.warning).toBe("");
+    }).then(() => {
+        rpc.loadWallet("ksh2", null).then((result) => {
+            expect(result.name).toBe("ksh2");
+            expect(result.warning).toBe("");
+        })
     })
   });
 });
