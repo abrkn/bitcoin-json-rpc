@@ -1,7 +1,8 @@
 import BitcoinJsonRpc from './../../src/BitcoinJsonRpc';
-require('dotenv').config()
-import tempy from 'tempy';
+require('dotenv').config();
 const randomstring = require("randomstring");
+const fs = require('fs');
+const os = require('os');
 
 describe('bitcoin-json-rpc-integration', () => {
     const url = process.env.RPC_PROTOCOL+'://'+process.env.RPC_USERNAME
@@ -73,6 +74,13 @@ describe('bitcoin-json-rpc-integration', () => {
                         expect(result.warning).toBe("");
                     })
                 })
+            })
+        });
+
+        it('Backup wallet', async () => {
+            const backupWalletDestination = os.tmpdir() + '/wallet_backup_' + randomstring.generate(10)
+            await walletRPC.backupWallet(backupWalletDestination).then(async () => {
+                expect(fs.existsSync(backupWalletDestination)).toBe(true)
             })
         });
 

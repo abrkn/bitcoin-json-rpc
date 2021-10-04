@@ -185,8 +185,10 @@ export const GetUnLoadWalletsResultDecoder = t.type({
 });
 export type GetUnLoadWalletsResult = t.TypeOf<typeof GetUnLoadWalletsResultDecoder>;
 
-export const GenerateToAddressResultDecoder = t.array(t.string);
+export const GetBackupWalletResultDecoder = t.null
+export type GetBackupWalletResult = t.TypeOf<typeof GetBackupWalletResultDecoder>;
 
+export const GenerateToAddressResultDecoder = t.array(t.string);
 export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;
 
 export const GetLiquidBalanceResultDecoder = t.record(t.string, t.number);

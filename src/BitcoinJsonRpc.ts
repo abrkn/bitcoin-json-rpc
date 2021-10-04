@@ -386,6 +386,10 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.GetUnLoadWalletsResultDecoder, 'unloadwallet', wallet_name, load_on_startup);
   }
 
+  public async backupWallet(destination:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetBackupWalletResultDecoder, 'backupwallet', destination);
+  }
+
   public async generateToAddress(nblocks: number, address:string) {
     return this.cmdWithRetryAndDecode(decoders.GenerateToAddressResultDecoder, 'generatetoaddress', nblocks, address);
   }

@@ -21,7 +21,6 @@
     "dotenv": "^10.0.0",
     "jest": "^27.2.4",
     "randomstring": "^1.2.1",
-    "tempy": "^2.0.0",
     "ts-jest": "^27.0.5",
     "typescript": "3.8.3"
   },
