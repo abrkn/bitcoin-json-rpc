@@ -405,8 +405,8 @@ export default class BitcoinJsonRpc {
   }
 
   // https://developer.bitcoin.org/reference/rpc/importwallet.html
-  public async importWallet(passphrase:string) {
-    return this.cmdWithRetryAndDecode(decoders.GetImportWalletsResultDecoder, 'importwallet', passphrase);
+  public async importWallet(filename:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetImportWalletsResultDecoder, 'importwallet', filename);
   }
 
   public async generateToAddress(nblocks: number, address:string) {
