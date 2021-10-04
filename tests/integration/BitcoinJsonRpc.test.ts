@@ -34,7 +34,7 @@ describe('bitcoin-json-rpc-integration', () => {
         it('check walletPassphrase', async () => {
             const passphrase = randomstring.generate(10)
             const wallet_name = randomstring.generate(10)
-            await rpc.createWallet(wallet_name, {passphrase}).then(async (result) => {
+            await rpc.createWallet(wallet_name, {passphrase}).then(async () => {
                 const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
                 await walletRPC.walletPassphrase(passphrase, 20).then(async () => {})
             })
@@ -88,6 +88,16 @@ describe('bitcoin-json-rpc-integration', () => {
             const dumpWalletPath = os.tmpdir() + '/wallet_dump_' + randomstring.generate(10)
             await walletRPC.dumpWallet(dumpWalletPath).then(async () => {
                 expect(fs.existsSync(dumpWalletPath)).toBe(true)
+            })
+        });
+
+        it('Encrypt wallet', async () => {
+            const wallet_name = randomstring.generate(10)
+            await rpc.createWallet(wallet_name).then(async () => {
+                const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
+                await walletRPC.encryptWallet("passphrase").then(async (result) => {
+                    expect(result).toContain("wallet encrypted")
+                })
             })
         });
 

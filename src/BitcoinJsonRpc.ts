@@ -6,7 +6,6 @@ import { PURE_METHODS, getWasExecutedFromError, getShouldRetry, iotsDecode } fro
 import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
 import * as decoders from './decoders';
 import * as t from 'io-ts';
-import {GetDumpWalletsResultDecoder} from "./decoders";
 
 const MAX_ATTEMPTS = 5;
 const DELAY_BETWEEN_ATTEMPTS = 5000;
@@ -394,6 +393,11 @@ export default class BitcoinJsonRpc {
   // https://developer.bitcoin.org/reference/rpc/dumpwallet.html
   public async dumpWallet(filename:string) {
     return this.cmdWithRetryAndDecode(decoders.GetDumpWalletsResultDecoder, 'dumpwallet', filename);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/encryptwallet.html
+  public async encryptWallet(passphrase:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetEncryptWalletsResultDecoder, 'encryptwallet', passphrase);
   }
 
   public async generateToAddress(nblocks: number, address:string) {
