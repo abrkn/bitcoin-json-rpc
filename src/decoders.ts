@@ -196,6 +196,9 @@ export type GetDumpWalletsResult = t.TypeOf<typeof GetDumpWalletsResultDecoder>;
 export const GetEncryptWalletsResultDecoder = t.string
 export type GetEncryptWalletsResult = t.TypeOf<typeof GetEncryptWalletsResultDecoder>;
 
+export const GetImportWalletsResultDecoder = t.null
+export type GetImportWalletsResult = t.TypeOf<typeof GetImportWalletsResultDecoder>;
+
 export const GenerateToAddressResultDecoder = t.array(t.string);
 export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;
 

@@ -6,6 +6,7 @@ import { PURE_METHODS, getWasExecutedFromError, getShouldRetry, iotsDecode } fro
 import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
 import * as decoders from './decoders';
 import * as t from 'io-ts';
+import {GetImportWalletsResultDecoder} from "./decoders";
 
 const MAX_ATTEMPTS = 5;
 const DELAY_BETWEEN_ATTEMPTS = 5000;
@@ -378,14 +379,17 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.GetWalletPassphraseResultDecoder, 'walletpassphrase', passphrase, timeout);
   }
 
+  // https://developer.bitcoin.org/reference/rpc/loadwallet.html
   public async loadWallet(filename:string, load_on_startup:boolean | null = null) {
     return this.cmdWithRetryAndDecode(decoders.GetLoadWalletsResultDecoder, 'loadwallet', filename, load_on_startup);
   }
 
+  // https://developer.bitcoin.org/reference/rpc/unloadwallet.html
   public async unloadWallet(wallet_name:string, load_on_startup:boolean | null = null) {
     return this.cmdWithRetryAndDecode(decoders.GetUnLoadWalletsResultDecoder, 'unloadwallet', wallet_name, load_on_startup);
   }
 
+  // https://developer.bitcoin.org/reference/rpc/backupwallet.html
   public async backupWallet(destination:string) {
     return this.cmdWithRetryAndDecode(decoders.GetBackupWalletResultDecoder, 'backupwallet', destination);
   }
@@ -398,6 +402,11 @@ export default class BitcoinJsonRpc {
   // https://developer.bitcoin.org/reference/rpc/encryptwallet.html
   public async encryptWallet(passphrase:string) {
     return this.cmdWithRetryAndDecode(decoders.GetEncryptWalletsResultDecoder, 'encryptwallet', passphrase);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/importwallet.html
+  public async importWallet(passphrase:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetImportWalletsResultDecoder, 'importwallet', passphrase);
   }
 
   public async generateToAddress(nblocks: number, address:string) {
