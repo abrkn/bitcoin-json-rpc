@@ -177,6 +177,9 @@ export type GetCreateWalletsResult = t.TypeOf<typeof GetCreateWalletsResultDecod
 export const GetWalletPassphraseResultDecoder = t.null
 export type GetWalletPassphraseResult = t.TypeOf<typeof GetWalletPassphraseResultDecoder>;
 
+export const GetWalletLockResultDecoder = t.null
+export type GetWalletLockResult = t.TypeOf<typeof GetWalletLockResultDecoder>;
+
 export const GetLoadWalletsResultDecoder = GetCreateWalletsResultDecoder;
 export type GetLoadWalletsResult = GetCreateWalletsResult;
 

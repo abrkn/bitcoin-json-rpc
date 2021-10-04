@@ -24,23 +24,24 @@ describe('bitcoin-json-rpc-integration', () => {
         }
         const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
 
-        it('Create wallet: default', async () => {
+        it('createwallet: default', async () => {
             await walletRPC.createWallet(wallet_name).then(async (result) => {
                 expect(result.name).toBe(wallet_name);
                 expect(result.warning).toBe("");
             })
         });
 
-        it('check walletPassphrase', async () => {
+        it('walletpassphrase/lock', async () => {
             const passphrase = randomstring.generate(10)
             const wallet_name = randomstring.generate(10)
             await rpc.createWallet(wallet_name, {passphrase}).then(async () => {
                 const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
-                await walletRPC.walletPassphrase(passphrase, 20).then(async () => {})
+                await walletRPC.walletPassphrase(passphrase, 20)
+                await walletRPC.walletlock()
             })
         });
 
-        it('check getBalances', async () => {
+        it('getbalances', async () => {
             await walletRPC.getBalances().then(async (result) => {
                 expect(result.mine).toBeDefined()
                 expect(result.mine.trusted).toBeDefined()
@@ -51,19 +52,19 @@ describe('bitcoin-json-rpc-integration', () => {
             })
         });
 
-        it('check listWallets', async () => {
+        it('listwallets', async () => {
             await walletRPC.listWallets().then(async (result) => {
                 expect(Array.isArray(result)).toBe(true);
             })
         });
 
-        it('check listLabels', async () => {
+        it('listlabels', async () => {
             await walletRPC.listLabels().then(async (result) => {
                 expect(Array.isArray(result)).toBe(true);
             })
         });
 
-        it('check loadWallet', async () => {
+        it('loadwallet', async () => {
             const wallet_name = randomstring.generate(10)
             await rpc.createWallet(wallet_name).then(async (result) => {
                 await rpc.unloadWallet(result.name, null).then(async (result) => {
@@ -77,21 +78,21 @@ describe('bitcoin-json-rpc-integration', () => {
             })
         });
 
-        it('Backup wallet', async () => {
+        it('backupwallet', async () => {
             const backupWalletDestination = os.tmpdir() + '/wallet_backup_' + randomstring.generate(10)
             await walletRPC.backupWallet(backupWalletDestination).then(async () => {
                 expect(fs.existsSync(backupWalletDestination)).toBe(true)
             })
         });
 
-        it('Dump wallet', async () => {
+        it('dumpwallet', async () => {
             const dumpWalletPath = os.tmpdir() + '/wallet_dump_' + randomstring.generate(10)
             await walletRPC.dumpWallet(dumpWalletPath).then(async () => {
                 expect(fs.existsSync(dumpWalletPath)).toBe(true)
             })
         });
 
-        it('Encrypt wallet', async () => {
+        it('encryptwallet', async () => {
             const wallet_name = randomstring.generate(10)
             await rpc.createWallet(wallet_name).then(async () => {
                 const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
@@ -101,13 +102,13 @@ describe('bitcoin-json-rpc-integration', () => {
             })
         });
 
-        it('import wallet', async () => {
+        it('importwallet', async () => {
             const dumpWalletPath = os.tmpdir() + '/wallet_dump_' + randomstring.generate(10)
             await walletRPC.dumpWallet(dumpWalletPath)
             await walletRPC.importWallet(dumpWalletPath)
         });
 
-        describe('getNewAddress', () => {
+        describe('getnewaddress', () => {
             it('test_label_bech32', async () => {
                 await walletRPC.getNewAddress({label: "test_label", type: 'bech32'}).then(async (result) => {
                     expect(result).toHaveLength(44)

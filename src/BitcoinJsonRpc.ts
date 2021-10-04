@@ -6,7 +6,7 @@ import { PURE_METHODS, getWasExecutedFromError, getShouldRetry, iotsDecode } fro
 import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
 import * as decoders from './decoders';
 import * as t from 'io-ts';
-import {GetImportWalletsResultDecoder} from "./decoders";
+import {GetImportWalletsResultDecoder, GetWalletLockResultDecoder} from "./decoders";
 
 const MAX_ATTEMPTS = 5;
 const DELAY_BETWEEN_ATTEMPTS = 5000;
@@ -377,6 +377,10 @@ export default class BitcoinJsonRpc {
 
   public async walletPassphrase(passphrase:string, timeout:number) {
     return this.cmdWithRetryAndDecode(decoders.GetWalletPassphraseResultDecoder, 'walletpassphrase', passphrase, timeout);
+  }
+
+  public async walletlock() {
+    return this.cmdWithRetryAndDecode(decoders.GetWalletLockResultDecoder, 'walletlock');
   }
 
   // https://developer.bitcoin.org/reference/rpc/loadwallet.html
