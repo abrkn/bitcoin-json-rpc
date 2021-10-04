@@ -1,11 +1,12 @@
 import delay from 'delay';
 import createDebug from 'debug';
-import { CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode } from './types';
+import {CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode, AddressTypes} from './types';
 import { jsonRpcCmd } from './json-rpc';
 import { PURE_METHODS, getWasExecutedFromError, getShouldRetry, iotsDecode } from './utils';
 import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
 import * as decoders from './decoders';
 import * as t from 'io-ts';
+import {GetImportWalletsResultDecoder, GetWalletLockResultDecoder} from "./decoders";
 
 const MAX_ATTEMPTS = 5;
 const DELAY_BETWEEN_ATTEMPTS = 5000;
@@ -116,7 +117,7 @@ export default class BitcoinJsonRpc {
       // Argument #4
       params.push(comment ?? '', commentTo);
     } else if (commentTo) {
-      // Argument #3 
+      // Argument #3
       params.push(comment);
     }
 
@@ -317,12 +318,99 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.LiquidValidateAddressResultDecoder, 'validateaddress', address);
   }
 
-  public async getNewAddress() {
-    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress');
+  public async getNewAddress(options: {
+    label?: string,
+    type?: AddressTypes
+  } = {}) {
+    const args: any[] = [options.label, options.type];
+    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', ...args);
   }
 
   public async getBalance() {
     return this.cmdWithRetryAndDecode(decoders.GetBalanceResultDecoder, 'getbalance');
+  }
+
+  public async getBalances() {
+    return this.cmdWithRetryAndDecode(decoders.GetBalancesResultDecoder, 'getbalances');
+  }
+
+  public async listLabels() {
+    return this.cmdWithRetryAndDecode(decoders.GetListLabelsResultDecoder, 'listlabels');
+  }
+
+  public async listWallets() {
+    return this.cmdWithRetryAndDecode(decoders.GetListWalletsResultDecoder, 'listwallets');
+  }
+
+  // Arguments:
+  // 1. wallet_name             (string, required) The name for the new wallet. If this is a path, the wallet will be created at the path location.
+  // 2. disable_private_keys    (boolean, optional, default=false) Disable the possibility of private keys (only watchonlys are possible in this mode).
+  // 3. blank                   (boolean, optional, default=false) Create a blank wallet. A blank wallet has no keys or HD seed. One can be set using sethdseed.
+  // 4. passphrase              (string, optional) Encrypt the wallet with this passphrase.
+  // 5. avoid_reuse             (boolean, optional, default=false) Keep track of coin reuse, and treat dirty and clean coins differently with privacy considerations in mind.
+  // 6. descriptors             (boolean, optional, default=false) Create a native descriptor wallet. The wallet will use descriptors internally to handle address creation
+  // 7. load_on_startup         (boolean, optional) Save wallet name to persistent settings and load on startup. True to add wallet to startup list, false to remove, null to leave unchanged.
+  // 8. external_signer         (boolean, optional, default=false) Use an external signer such as a hardware wallet. Requires -signer to be configured. Wallet creation will fail if keys cannot be fetched. Requires disable_private_keys and descriptors set to true.
+  public async createWallet(
+      wallet_name:string,
+      options: {
+        disable_private_keys?: boolean | false,
+        blank?: boolean | false,
+        passphrase?: string | null,
+        avoid_reuse?: boolean | false,
+        descriptors?: boolean | false,
+        load_on_startup?: boolean | false,
+        external_signer?: boolean | false
+      } = {}
+  ) {
+    const args: any[] = [wallet_name];
+    args.push(options.disable_private_keys)
+    args.push(options.blank)
+    args.push(options.passphrase)
+    args.push(options.avoid_reuse)
+    args.push(options.descriptors)
+    args.push(options.load_on_startup)
+    args.push(options.external_signer)
+
+    return this.cmdWithRetryAndDecode(decoders.GetCreateWalletsResultDecoder, 'createwallet', ...args);
+  }
+
+  public async walletPassphrase(passphrase:string, timeout:number) {
+    return this.cmdWithRetryAndDecode(decoders.GetWalletPassphraseResultDecoder, 'walletpassphrase', passphrase, timeout);
+  }
+
+  public async walletlock() {
+    return this.cmdWithRetryAndDecode(decoders.GetWalletLockResultDecoder, 'walletlock');
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/loadwallet.html
+  public async loadWallet(filename:string, load_on_startup:boolean | null = null) {
+    return this.cmdWithRetryAndDecode(decoders.GetLoadWalletsResultDecoder, 'loadwallet', filename, load_on_startup);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/unloadwallet.html
+  public async unloadWallet(wallet_name:string, load_on_startup:boolean | null = null) {
+    return this.cmdWithRetryAndDecode(decoders.GetUnLoadWalletsResultDecoder, 'unloadwallet', wallet_name, load_on_startup);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/backupwallet.html
+  public async backupWallet(destination:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetBackupWalletResultDecoder, 'backupwallet', destination);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/dumpwallet.html
+  public async dumpWallet(filename:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetDumpWalletsResultDecoder, 'dumpwallet', filename);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/encryptwallet.html
+  public async encryptWallet(passphrase:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetEncryptWalletsResultDecoder, 'encryptwallet', passphrase);
+  }
+
+  // https://developer.bitcoin.org/reference/rpc/importwallet.html
+  public async importWallet(filename:string) {
+    return this.cmdWithRetryAndDecode(decoders.GetImportWalletsResultDecoder, 'importwallet', filename);
   }
 
   public async generateToAddress(nblocks: number, address:string) {

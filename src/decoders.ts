@@ -142,11 +142,67 @@ export const LiquidValidateAddressResultDecoder = t.type({
 export type LiquidValidateAddressResult = t.TypeOf<typeof LiquidValidateAddressResultDecoder>;
 
 export const GetBalanceResultDecoder = t.number;
-
 export type GetBalanceResult = t.TypeOf<typeof GetBalanceResultDecoder>;
 
-export const GenerateToAddressResultDecoder = t.array(t.string);
+export const GetBalancesResultDecoder = t.type({
+    mine: t.type({
+        trusted: t.number,
+        untrusted_pending: t.number,
+        immature: t.number,
+        used: t.union([t.number, t.undefined])
+    }),
+    watchonly: t.union([
+        t.type({
+            trusted: t.number,
+            untrusted_pending: t.number,
+            immature: t.number,
+        }),
+        t.undefined]
+    )
+});
+export type GetBalancesResult = t.TypeOf<typeof GetBalancesResultDecoder>;
 
+export const GetListLabelsResultDecoder = t.array(t.string);
+export type GetListLabelsResult = t.TypeOf<typeof GetListLabelsResultDecoder>;
+
+export const GetListWalletsResultDecoder = t.array(t.string);
+export type GetListWalletsResult = t.TypeOf<typeof GetListWalletsResultDecoder>;
+
+export const GetCreateWalletsResultDecoder = t.type({
+    name: t.string,   // (string) The wallet name if loaded successfully.
+    warning: t.string // (string) Warning message if wallet was not loaded cleanly.
+});
+export type GetCreateWalletsResult = t.TypeOf<typeof GetCreateWalletsResultDecoder>;
+
+export const GetWalletPassphraseResultDecoder = t.null
+export type GetWalletPassphraseResult = t.TypeOf<typeof GetWalletPassphraseResultDecoder>;
+
+export const GetWalletLockResultDecoder = t.null
+export type GetWalletLockResult = t.TypeOf<typeof GetWalletLockResultDecoder>;
+
+export const GetLoadWalletsResultDecoder = GetCreateWalletsResultDecoder;
+export type GetLoadWalletsResult = GetCreateWalletsResult;
+
+export const GetUnLoadWalletsResultDecoder = t.type({
+    warning: t.string // Warning message if wallet was not loaded cleanly.
+});
+export type GetUnLoadWalletsResult = t.TypeOf<typeof GetUnLoadWalletsResultDecoder>;
+
+export const GetBackupWalletResultDecoder = t.null
+export type GetBackupWalletResult = t.TypeOf<typeof GetBackupWalletResultDecoder>;
+
+export const GetDumpWalletsResultDecoder = t.type({
+    filename: t.string // The filename with full absolute path
+});
+export type GetDumpWalletsResult = t.TypeOf<typeof GetDumpWalletsResultDecoder>;
+
+export const GetEncryptWalletsResultDecoder = t.string
+export type GetEncryptWalletsResult = t.TypeOf<typeof GetEncryptWalletsResultDecoder>;
+
+export const GetImportWalletsResultDecoder = t.null
+export type GetImportWalletsResult = t.TypeOf<typeof GetImportWalletsResultDecoder>;
+
+export const GenerateToAddressResultDecoder = t.array(t.string);
 export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;
 
 export const GetLiquidBalanceResultDecoder = t.record(t.string, t.number);
