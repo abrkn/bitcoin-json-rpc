@@ -181,12 +181,17 @@ export const GetLoadWalletsResultDecoder = GetCreateWalletsResultDecoder;
 export type GetLoadWalletsResult = GetCreateWalletsResult;
 
 export const GetUnLoadWalletsResultDecoder = t.type({
-    warning: t.string // (string) Warning message if wallet was not loaded cleanly.
+    warning: t.string // Warning message if wallet was not loaded cleanly.
 });
 export type GetUnLoadWalletsResult = t.TypeOf<typeof GetUnLoadWalletsResultDecoder>;
 
 export const GetBackupWalletResultDecoder = t.null
 export type GetBackupWalletResult = t.TypeOf<typeof GetBackupWalletResultDecoder>;
+
+export const GetDumpWalletsResultDecoder = t.type({
+    filename: t.string // The filename with full absolute path
+});
+export type GetDumpWalletsResult = t.TypeOf<typeof GetDumpWalletsResultDecoder>;
 
 export const GenerateToAddressResultDecoder = t.array(t.string);
 export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;

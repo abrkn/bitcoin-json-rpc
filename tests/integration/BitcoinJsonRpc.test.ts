@@ -84,6 +84,13 @@ describe('bitcoin-json-rpc-integration', () => {
             })
         });
 
+        it('Dump wallet', async () => {
+            const dumpWalletPath = os.tmpdir() + '/wallet_dump_' + randomstring.generate(10)
+            await walletRPC.dumpWallet(dumpWalletPath).then(async () => {
+                expect(fs.existsSync(dumpWalletPath)).toBe(true)
+            })
+        });
+
         describe('getNewAddress', () => {
             it('test_label_bech32', async () => {
                 await walletRPC.getNewAddress({label: "test_label", type: 'bech32'}).then(async (result) => {
