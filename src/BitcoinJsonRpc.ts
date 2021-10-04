@@ -321,7 +321,8 @@ export default class BitcoinJsonRpc {
     label?: string,
     type?: AddressTypes
   } = {}) {
-    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', options);
+    const args: any[] = [options.label, options.type];
+    return this.cmdWithRetryAndDecode(decoders.GetNewAddressResultDecoder, 'getnewaddress', ...args);
   }
 
   public async getBalance() {
@@ -371,6 +372,10 @@ export default class BitcoinJsonRpc {
     args.push(options.external_signer)
 
     return this.cmdWithRetryAndDecode(decoders.GetCreateWalletsResultDecoder, 'createwallet', ...args);
+  }
+
+  public async walletPassphrase(passphrase:string, timeout:number) {
+    return this.cmdWithRetryAndDecode(decoders.GetWalletPassphraseResultDecoder, 'walletpassphrase', passphrase, timeout);
   }
 
   public async loadWallet(filename:string, load_on_startup:boolean | null = null) {

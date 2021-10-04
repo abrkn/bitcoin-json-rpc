@@ -10,77 +10,8 @@ describe('bitcoin-json-rpc-integration', () => {
         +':'+process.env.RPC_REGTEST_PORT;
     const rpc = new BitcoinJsonRpc(url);
 
-    describe('getNewAddress', () => {
-        it('test_label_bech32', () => {
-            rpc.getNewAddress({label: "test_label", type: 'bech32'}).then((result) => {
-                expect(result).toHaveLength(44)
-            })
-        });
-        it('bech32', () => {
-            rpc.getNewAddress({type: "bech32"}).then((result) => {
-                expect(result).toHaveLength(44)
-            })
-        });
-        it('p2sh-segwit', () => {
-            rpc.getNewAddress({type: "p2sh-segwit"}).then((result) => {
-                expect(result).toHaveLength(35)
-            })
-        });
-        it('legacy', () => {
-            rpc.getNewAddress({type: "legacy"}).then((result) => {
-                expect(result).toHaveLength(34)
-            })
-        });
-        it('test_label', () => {
-            rpc.getNewAddress({label: "test_label"}).then((result) => {
-                expect(result).toHaveLength(44)
-            })
-        });
-        it('default arguments: label="" type=bech32', () => {
-            rpc.getNewAddress().then((result) => {
-                expect(result).toHaveLength(44)
-            })
-        });
-    })
-
-  it('check getBalances', () => {
-    rpc.getBalances().then((result) => {
-        expect(result.mine).toBeDefined()
-        expect(result.mine.trusted).toBeDefined()
-        expect(result.mine.immature).toBeDefined()
-        expect(result.mine.untrusted_pending).toBeDefined()
-        expect(result.mine.used).toBeUndefined()
-        expect(result.watchonly).toBeUndefined()
-    })
-  });
-
-  it('check listWallets', () => {
-    rpc.listWallets().then((result) => {
-        expect(Array.isArray(result)).toBe(true);
-    })
-  });
-
-  it('check listLabels', () => {
-    rpc.listLabels().then((result) => {
-        expect(Array.isArray(result)).toBe(true);
-    })
-  });
-
-  it('check loadWallet', () => {
-    const wallet_name = randomstring.generate(10)
-    rpc.createWallet(wallet_name).then((result) => {
-        rpc.unloadWallet(result.name, null).then((result) => {
-            expect(result.warning).toBe("");
-        }).then(() => {
-            rpc.loadWallet(result.name, null).then((result) => {
-                expect(result.name).toBe(wallet_name);
-                expect(result.warning).toBe("");
-            })
-        })
-    })
-  });
-
-    describe('Create Wallet', () => {
+    describe('Wallet', () => {
+        const wallet_name = randomstring.generate(10)
         const options = {
             disable_private_keys: false,
             blank: false,
@@ -90,13 +21,92 @@ describe('bitcoin-json-rpc-integration', () => {
             load_on_startup: true,
             external_signer: false
         }
+        const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
 
-        it('default', () => {
-            const wallet_name = randomstring.generate(10)
-            rpc.createWallet(wallet_name).then((result) => {
+        it('Create wallet: default', async () => {
+            await walletRPC.createWallet(wallet_name).then(async (result) => {
                 expect(result.name).toBe(wallet_name);
                 expect(result.warning).toBe("");
             })
         });
+
+        it('check walletPassphrase', async () => {
+            const passphrase = randomstring.generate(10)
+            const wallet_name = randomstring.generate(10)
+            await rpc.createWallet(wallet_name, {passphrase}).then(async (result) => {
+                const walletRPC = new BitcoinJsonRpc(url + '/wallet/' + wallet_name)
+                await walletRPC.walletPassphrase(passphrase, 20).then(async () => {})
+            })
+        });
+
+        it('check getBalances', async () => {
+            await walletRPC.getBalances().then(async (result) => {
+                expect(result.mine).toBeDefined()
+                expect(result.mine.trusted).toBeDefined()
+                expect(result.mine.immature).toBeDefined()
+                expect(result.mine.untrusted_pending).toBeDefined()
+                expect(result.mine.used).toBeUndefined()
+                expect(result.watchonly).toBeUndefined()
+            })
+        });
+
+        it('check listWallets', async () => {
+            await walletRPC.listWallets().then(async (result) => {
+                expect(Array.isArray(result)).toBe(true);
+            })
+        });
+
+        it('check listLabels', async () => {
+            await walletRPC.listLabels().then(async (result) => {
+                expect(Array.isArray(result)).toBe(true);
+            })
+        });
+
+        it('check loadWallet', async () => {
+            const wallet_name = randomstring.generate(10)
+            await rpc.createWallet(wallet_name).then(async (result) => {
+                await rpc.unloadWallet(result.name, null).then(async (result) => {
+                    expect(result.warning).toBe("");
+                }).then(async () => {
+                    await rpc.loadWallet(result.name, null).then(async (result) => {
+                        expect(result.name).toBe(wallet_name);
+                        expect(result.warning).toBe("");
+                    })
+                })
+            })
+        });
+
+        describe('getNewAddress', () => {
+            it('test_label_bech32', async () => {
+                await walletRPC.getNewAddress({label: "test_label", type: 'bech32'}).then(async (result) => {
+                    expect(result).toHaveLength(44)
+                })
+            });
+            it('bech32', async () => {
+                await walletRPC.getNewAddress({type: "bech32"}).then(async (result) => {
+                    expect(result).toHaveLength(44)
+                })
+            });
+            it('p2sh-segwit', async () => {
+                await walletRPC.getNewAddress({type: "p2sh-segwit"}).then(async (result) => {
+                    expect(result).toHaveLength(35)
+                })
+            });
+            it('legacy', async () => {
+                await walletRPC.getNewAddress({type: "legacy"}).then(async (result) => {
+                    expect(result).toHaveLength(34)
+                })
+            });
+            it('test_label', async () => {
+                await walletRPC.getNewAddress({label: "test_label"}).then(async (result) => {
+                    expect(result).toHaveLength(44)
+                })
+            });
+            it('default arguments: label="" type=bech32', async () => {
+                await walletRPC.getNewAddress().then(async (result) => {
+                    expect(result).toHaveLength(44)
+                })
+            });
+        })
     })
 });
