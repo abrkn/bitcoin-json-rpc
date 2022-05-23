@@ -6,7 +6,9 @@ export const SignRawTransactionWithWalletResultDecoder = t.type({
   // TODO: errors field
 });
 
-export type SignRawTransactionWithWalletResult = t.TypeOf<typeof SignRawTransactionWithWalletResultDecoder>;
+export type SignRawTransactionWithWalletResult = t.TypeOf<
+  typeof SignRawTransactionWithWalletResultDecoder
+>;
 
 export const SendToAddressResultDecoder = t.string;
 
@@ -18,19 +20,25 @@ export type LockUnspentResult = t.TypeOf<typeof LockUnspentResultDecoder>;
 
 export const SendRawTransactionResultDecoder = t.string;
 
-export type SendRawTransactionResult = t.TypeOf<typeof SendRawTransactionResultDecoder>;
+export type SendRawTransactionResult = t.TypeOf<
+  typeof SendRawTransactionResultDecoder
+>;
 
 export const FundRawTransactionResultDecoder = t.type({
   hex: t.string,
   fee: t.number,
-  changepos: t.number
+  changepos: t.number,
 });
 
-export type FundRawTransactionResultDecoder = t.TypeOf<typeof FundRawTransactionResultDecoder>;
+export type FundRawTransactionResultDecoder = t.TypeOf<
+  typeof FundRawTransactionResultDecoder
+>;
 
 export const CreateRawTransactionResultDecoder = t.string;
 
-export type CreateRawTransactionResult = t.TypeOf<typeof CreateRawTransactionResultDecoder>;
+export type CreateRawTransactionResult = t.TypeOf<
+  typeof CreateRawTransactionResultDecoder
+>;
 
 export const GetTransactionResultDecoder = t.type({
   fee: t.union([t.number, t.undefined]),
@@ -58,7 +66,9 @@ export const LiquidGetTransactionResultDecoder = t.type({
   ),
 });
 
-export type LiquidGetTransactionResult = t.TypeOf<typeof LiquidGetTransactionResultDecoder>;
+export type LiquidGetTransactionResult = t.TypeOf<
+  typeof LiquidGetTransactionResultDecoder
+>;
 
 export const GetInfoResultDecoder = t.type({
   blocks: t.number,
@@ -71,22 +81,30 @@ export const GetBlockchainInfoResultDecoder = t.type({
   headers: t.union([t.number, t.undefined]),
 });
 
-export type GetBlockchainInfoResult = t.TypeOf<typeof GetBlockchainInfoResultDecoder>;
+export type GetBlockchainInfoResult = t.TypeOf<
+  typeof GetBlockchainInfoResultDecoder
+>;
 
 export const GetRawTransactionAsObjectResultOutputDecoder = t.type({
   // NOTE: Can be `undefined` on Litecoin with Mimblewimble
   n: t.union([t.number, t.undefined]),
   // NOTE: Can be undefined Liquid
   value: t.union([t.number, t.undefined]),
-  scriptPubKey: t.type({
-    hex: t.string,
-    addresses: t.union([t.array(t.string), t.undefined]),
-    type: t.union([t.literal('scripthash'), t.string]),
-    reqSigs: t.union([t.number, t.undefined]),
-  }),
+  // NOTE: Can be `undefined` on Litecoin with Mimblewimble
+  scriptPubKey: t.union([
+    t.type({
+      hex: t.string,
+      addresses: t.union([t.array(t.string), t.undefined]),
+      type: t.union([t.literal('scripthash'), t.string]),
+      reqSigs: t.union([t.number, t.undefined]),
+    }),
+    t.undefined,
+  ]),
 });
 
-export type GetRawTransactionAsObjectResultOutput = t.TypeOf<typeof GetRawTransactionAsObjectResultOutputDecoder>;
+export type GetRawTransactionAsObjectResultOutput = t.TypeOf<
+  typeof GetRawTransactionAsObjectResultOutputDecoder
+>;
 
 export const GetRawTransactionAsObjectResultDecoder = t.type({
   txid: t.string,
@@ -103,11 +121,15 @@ export const GetRawTransactionAsObjectResultDecoder = t.type({
   ),
 });
 
-export type GetRawTransactionAsObjectResult = t.TypeOf<typeof GetRawTransactionAsObjectResultDecoder>;
+export type GetRawTransactionAsObjectResult = t.TypeOf<
+  typeof GetRawTransactionAsObjectResultDecoder
+>;
 
 export const GetBlockHashFromHeightResultDecoder = t.string;
 
-export type GetBlockHashFromHeightResult = t.TypeOf<typeof GetBlockHashFromHeightResultDecoder>;
+export type GetBlockHashFromHeightResult = t.TypeOf<
+  typeof GetBlockHashFromHeightResultDecoder
+>;
 
 // If verbosity is 0, returns a string that is serialized, hex-encoded data for block 'hash'.
 // If verbosity is 1, returns an Object with information about block <hash>.
@@ -118,7 +140,9 @@ export const GetBlockFromHashResultDecoder = t.type({
   height: t.number,
 });
 
-export type GetBlockFromHashResult = t.TypeOf<typeof GetBlockFromHashResultDecoder>;
+export type GetBlockFromHashResult = t.TypeOf<
+  typeof GetBlockFromHashResultDecoder
+>;
 
 export const GetRawMempoolResultDecoder = t.array(t.string);
 
@@ -132,7 +156,9 @@ export const ValidateAddressResultDecoder = t.type({
   isvalid: t.boolean,
 });
 
-export type ValidateAddressResult = t.TypeOf<typeof ValidateAddressResultDecoder>;
+export type ValidateAddressResult = t.TypeOf<
+  typeof ValidateAddressResultDecoder
+>;
 
 export const LiquidValidateAddressResultDecoder = t.type({
   ...ValidateAddressResultDecoder.props,
@@ -140,7 +166,9 @@ export const LiquidValidateAddressResultDecoder = t.type({
   address: t.string,
 });
 
-export type LiquidValidateAddressResult = t.TypeOf<typeof LiquidValidateAddressResultDecoder>;
+export type LiquidValidateAddressResult = t.TypeOf<
+  typeof LiquidValidateAddressResultDecoder
+>;
 
 export const GetBalanceResultDecoder = t.number;
 
@@ -148,13 +176,17 @@ export type GetBalanceResult = t.TypeOf<typeof GetBalanceResultDecoder>;
 
 export const GenerateToAddressResultDecoder = t.array(t.string);
 
-export type GenerateToAddressResult = t.TypeOf<typeof GenerateToAddressResultDecoder>;
+export type GenerateToAddressResult = t.TypeOf<
+  typeof GenerateToAddressResultDecoder
+>;
 
 export const GetLiquidBalanceResultDecoder = t.record(t.string, t.number);
 
 export const GetLiquidBalanceForAssetResultDecoder = t.number;
 
-export type GetLiquidBalanceResult = t.TypeOf<typeof GetLiquidBalanceResultDecoder>;
+export type GetLiquidBalanceResult = t.TypeOf<
+  typeof GetLiquidBalanceResultDecoder
+>;
 
 export const OmniGetWalletAddressBalancesResultDecoder = t.array(
   t.type({
@@ -171,7 +203,9 @@ export const OmniGetWalletAddressBalancesResultDecoder = t.array(
   })
 );
 
-export type OmniGetWalletAddressBalancesResult = t.TypeOf<typeof OmniGetWalletAddressBalancesResultDecoder>;
+export type OmniGetWalletAddressBalancesResult = t.TypeOf<
+  typeof OmniGetWalletAddressBalancesResultDecoder
+>;
 
 export const GetGetBlockchainInfoResultDecoder = t.array(
   t.type({
@@ -180,7 +214,9 @@ export const GetGetBlockchainInfoResultDecoder = t.array(
   })
 );
 
-export type GetGetBlockchainInfoResult = t.TypeOf<typeof GetGetBlockchainInfoResultDecoder>;
+export type GetGetBlockchainInfoResult = t.TypeOf<
+  typeof GetGetBlockchainInfoResultDecoder
+>;
 
 export const AncientGetInfoResultDecoder = t.type({
   blocks: t.number,
@@ -221,7 +257,9 @@ export const OmniGetTransactionResultDecoder = t.type({
   referenceaddress: t.union([t.string, t.undefined]),
 });
 
-export type OmniGetTransactionResult = t.TypeOf<typeof OmniGetTransactionResultDecoder>;
+export type OmniGetTransactionResult = t.TypeOf<
+  typeof OmniGetTransactionResultDecoder
+>;
 
 export const OmniListPendingTransactionsDecoder = t.array(
   t.type({
@@ -235,15 +273,21 @@ export const OmniListPendingTransactionsDecoder = t.array(
   })
 );
 
-export type OmniListPendingTransactionsResult = t.TypeOf<typeof OmniListPendingTransactionsDecoder>;
+export type OmniListPendingTransactionsResult = t.TypeOf<
+  typeof OmniListPendingTransactionsDecoder
+>;
 
 export const ZcashGetOperationResultDecoder = t.array(t.any);
 
-export type ZcashGetOperationResultResult = t.TypeOf<typeof ZcashGetOperationResultDecoder>;
+export type ZcashGetOperationResultResult = t.TypeOf<
+  typeof ZcashGetOperationResultDecoder
+>;
 
 export const ZcashGetBalanceForAddressDecoder = t.number;
 
-export type ZcashGetBalanceForAddressResult = t.TypeOf<typeof ZcashGetBalanceForAddressDecoder>;
+export type ZcashGetBalanceForAddressResult = t.TypeOf<
+  typeof ZcashGetBalanceForAddressDecoder
+>;
 
 export const ZcashSendManyDecoder = t.string;
 
@@ -255,7 +299,9 @@ export const ZcashValidateAddressDecoder = t.type({
   type: t.union([t.string, t.undefined]),
 });
 
-export type ZcashValidateAddressResult = t.TypeOf<typeof ZcashValidateAddressDecoder>;
+export type ZcashValidateAddressResult = t.TypeOf<
+  typeof ZcashValidateAddressDecoder
+>;
 
 export const OmniSendDecoder = t.string;
 
@@ -263,7 +309,9 @@ export type OmniSendResult = t.TypeOf<typeof OmniSendDecoder>;
 
 export const ZcashGetNewAddressDecoder = t.string;
 
-export type ZcashGetNewAddressResult = t.TypeOf<typeof ZcashGetNewAddressDecoder>;
+export type ZcashGetNewAddressResult = t.TypeOf<
+  typeof ZcashGetNewAddressDecoder
+>;
 
 export const ZcashListUnspentDecoder = t.array(
   t.type({
