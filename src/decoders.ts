@@ -74,7 +74,8 @@ export const GetBlockchainInfoResultDecoder = t.type({
 export type GetBlockchainInfoResult = t.TypeOf<typeof GetBlockchainInfoResultDecoder>;
 
 export const GetRawTransactionAsObjectResultOutputDecoder = t.type({
-  n: t.number,
+  // NOTE: Can be `undefined` on Litecoin with Mimblewimble
+  n: t.union([t.number, t.undefined]),
   // NOTE: Can be undefined Liquid
   value: t.union([t.number, t.undefined]),
   scriptPubKey: t.type({
