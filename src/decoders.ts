@@ -79,6 +79,7 @@ export type GetInfoResult = t.TypeOf<typeof GetInfoResultDecoder>;
 export const GetBlockchainInfoResultDecoder = t.type({
   blocks: t.number,
   headers: t.union([t.number, t.undefined]),
+  initial_block_download_complete: t.union([t.boolean, t.undefined]),
 });
 
 export type GetBlockchainInfoResult = t.TypeOf<
