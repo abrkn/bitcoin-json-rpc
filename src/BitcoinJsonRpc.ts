@@ -18,11 +18,11 @@ export default class BitcoinJsonRpc {
     this.options = options;
   }
 
-  private cmd(method: string, ...params: any[]): Promise<any> {
+  public cmd(method: string, ...params: any[]): Promise<any> {
     return jsonRpcCmd(this.url, method, params);
   }
 
-  private cmdWithRetry(method: string, ...params: any[]): Promise<any> {
+  public cmdWithRetry(method: string, ...params: any[]): Promise<any> {
     const methodIsPure = PURE_METHODS.includes(method);
     const maxAttempts = MAX_ATTEMPTS;
 
