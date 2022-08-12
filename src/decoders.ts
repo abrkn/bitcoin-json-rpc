@@ -96,6 +96,7 @@ export const GetRawTransactionAsObjectResultOutputDecoder = t.type({
     t.type({
       hex: t.string,
       addresses: t.union([t.array(t.string), t.undefined]),
+      address: t.union([t.string, t.undefined]),
       type: t.union([t.literal('scripthash'), t.string]),
       reqSigs: t.union([t.number, t.undefined]),
     }),
