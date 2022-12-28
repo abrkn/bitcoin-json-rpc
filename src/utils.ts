@@ -81,6 +81,7 @@ export const PURE_METHODS = [
   'getinfo',
   'getblockchaininfo',
   'getrawtransaction',
+  'getblockcount',
   'getblockhash',
   'getrawmempool',
   'validateaddress',
