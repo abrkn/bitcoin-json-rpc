@@ -250,7 +250,11 @@ export default class BitcoinJsonRpc {
   //        "UNSET"
   //        "ECONOMICAL"
   //        "CONSERVATIVE"
-  // 9. "assetlabel"               (string, optional) Hex asset id or asset label for balance.
+  // 9. avoid_reuse              (boolean, optional, default=true) (only available if avoid_reuse wallet flag is set) 
+  // Avoid spending from dirty addresses; addresses are considered
+  //                             dirty if they have previously been used in a transaction.
+  //                              If true, this also activates avoidpartialspends, grouping outputs by their addresses.
+  // 10. assetlabel              (string, optional) Hex asset id or asset label for balance.
   public async liquidSendToAddress(
     address: string,
     amount: string,
@@ -260,6 +264,7 @@ export default class BitcoinJsonRpc {
     replaceable: boolean | null,
     confTarget: number | null,
     estimateMode: BitcoinFeeEstimateMode | null,
+    avoidReuse: boolean | null,
     asset: string | null
   ) {
     return this.cmdWithRetryAndDecode(
@@ -273,6 +278,7 @@ export default class BitcoinJsonRpc {
       replaceable,
       confTarget,
       estimateMode,
+      avoidReuse,
       asset
     );
   }
@@ -336,6 +342,7 @@ export default class BitcoinJsonRpc {
   public async getLiquidBalanceForAsset(
     minConf: number | null = null,
     includeWatchOnly: boolean | null = null,
+    avoidReuse: boolean | null = null,
     assetLabel: string
   ) {
     return this.cmdWithRetryAndDecode(
@@ -344,6 +351,7 @@ export default class BitcoinJsonRpc {
       '*',
       minConf,
       includeWatchOnly,
+      avoidReuse,
       assetLabel
     );
   }
