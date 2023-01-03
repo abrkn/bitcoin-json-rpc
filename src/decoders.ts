@@ -62,7 +62,7 @@ export const LiquidGetTransactionResultDecoder = t.type({
       asset: t.string,
       vout: t.number,
       fee: t.union([t.number, t.undefined]),
-    })
+    }),
   ),
 });
 
@@ -119,7 +119,7 @@ export const GetRawTransactionAsObjectResultDecoder = t.type({
       txid: t.union([t.string, t.undefined]),
       // NOTE: vout is undefined for coinbase tx
       vout: t.union([t.number, t.undefined]),
-    })
+    }),
   ),
 });
 
@@ -145,6 +145,10 @@ export const GetBlockFromHashResultDecoder = t.type({
 export type GetBlockFromHashResult = t.TypeOf<
   typeof GetBlockFromHashResultDecoder
 >;
+
+export const GetBlockCountResultDecoder = t.number;
+
+export type GetBlockCountResult = t.TypeOf<typeof GetBlockCountResultDecoder>;
 
 export const GetRawMempoolResultDecoder = t.array(t.string);
 
@@ -200,9 +204,9 @@ export const OmniGetWalletAddressBalancesResultDecoder = t.array(
         balance: t.string,
         reserved: t.string,
         frozen: t.string,
-      })
+      }),
     ),
-  })
+  }),
 );
 
 export type OmniGetWalletAddressBalancesResult = t.TypeOf<
@@ -213,7 +217,7 @@ export const GetGetBlockchainInfoResultDecoder = t.array(
   t.type({
     blocks: t.number,
     headers: t.union([t.number, t.undefined]),
-  })
+  }),
 );
 
 export type GetGetBlockchainInfoResult = t.TypeOf<
@@ -272,7 +276,7 @@ export const OmniListPendingTransactionsDecoder = t.array(
     type: t.string,
     version: t.number,
     referenceaddress: t.union([t.string, t.undefined]),
-  })
+  }),
 );
 
 export type OmniListPendingTransactionsResult = t.TypeOf<
@@ -322,7 +326,7 @@ export const ZcashListUnspentDecoder = t.array(
     change: t.boolean,
     amount: t.number,
     outindex: t.union([t.number, t.undefined]),
-  })
+  }),
 );
 
 export type ZcashListUnspentResult = t.TypeOf<typeof ZcashListUnspentDecoder>;
@@ -337,7 +341,7 @@ export const ListUnspentDecoder = t.array(
     spendable: t.boolean,
     solvable: t.union([t.boolean, t.undefined]),
     safe: t.union([t.boolean, t.undefined]),
-  })
+  }),
 );
 
 export type ListUnspentResult = t.TypeOf<typeof ListUnspentDecoder>;
