@@ -332,7 +332,7 @@ export default class BitcoinJsonRpc {
   }
 
   public async getBalance(minConf = 0) {
-    return this.cmdWithRetryAndDecode(decoders.GetBalanceResultDecoder, 'getbalance', '*', minConf); );
+    return this.cmdWithRetryAndDecode(decoders.GetBalanceResultDecoder, 'getbalance', '*', minConf);
   }
 
   public async generateToAddress(nblocks: number, address:string) {
