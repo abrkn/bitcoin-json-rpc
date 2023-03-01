@@ -443,7 +443,8 @@ export default class BitcoinJsonRpc {
       memo?: string;
     }[],
     minConf?: number,
-    fee?: number
+    fee?: number,
+    privacyPolicy?: string
   ) {
     const args: any[] = [fromAddress, amounts];
 
@@ -452,6 +453,10 @@ export default class BitcoinJsonRpc {
 
       if (fee !== undefined) {
         args.push(fee);
+
+        if (privacyPolicy !== undefined) {
+          args.push(privacyPolicy);
+        }
       }
     } else if (fee !== undefined) {
       throw new Error('Cannot specify fee without specifying minConf');
