@@ -160,6 +160,8 @@ export type GetNewAddressResult = t.TypeOf<typeof GetNewAddressResultDecoder>;
 
 export const ValidateAddressResultDecoder = t.type({
   isvalid: t.boolean,
+  address: t.union([t.string, t.undefined]),
+  ismweb: t.union([t.boolean, t.undefined])
 });
 
 export type ValidateAddressResult = t.TypeOf<
