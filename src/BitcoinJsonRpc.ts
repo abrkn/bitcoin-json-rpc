@@ -509,6 +509,10 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.DumpPrivateKeyDecoder, 'dumpprivkey', address);
   }
 
+  public async ecashIsFinalTransaction(txid: string, blockhash?: string) {
+    return this.cmdWithRetryAndDecode(decoders.EcashIsFinalTransactionDecoder, 'isfinaltransaction', txid, blockhash);
+  }
+
   public async isReady() {
     try {
       if (this.options.ancient === true) {
