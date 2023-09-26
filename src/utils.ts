@@ -96,6 +96,7 @@ export const PURE_METHODS = [
   'listunspent',
   'dumpprivkey',
   'gettransaction',
+  'isfinaltransaction',
 ];
 
 export const getWasExecutedFromError = (method: string, error: Error) => {

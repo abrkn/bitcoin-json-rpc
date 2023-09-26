@@ -349,3 +349,5 @@ export const ListUnspentDecoder = t.array(
 export type ListUnspentResult = t.TypeOf<typeof ListUnspentDecoder>;
 
 export const DumpPrivateKeyDecoder = t.string;
+
+export const EcashIsFinalTransactionDecoder = t.boolean;
