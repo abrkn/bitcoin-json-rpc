@@ -307,8 +307,8 @@ export default class BitcoinJsonRpc {
     return this.cmdWithRetryAndDecode(decoders.GetBlockHashFromHeightResultDecoder, 'getblockhash', height);
   }
 
-  public async getBlockFromHash(blockHash: string) {
-    return this.cmdWithRetryAndDecode(decoders.GetBlockFromHashResultDecoder, 'getblock', blockHash);
+  public async getBlockFromHash(blockHash: string, verbosity = 1) {
+    return this.cmdWithRetryAndDecode(decoders.GetBlockFromHashResultDecoder, 'getblock', blockHash, verbosity);
   }
 
   public async getBlockCount() {
