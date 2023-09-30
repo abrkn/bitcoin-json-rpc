@@ -136,9 +136,46 @@ export type GetBlockHashFromHeightResult = t.TypeOf<
 // If verbosity is 0, returns a string that is serialized, hex-encoded data for block 'hash'.
 // If verbosity is 1, returns an Object with information about block <hash>.
 // If verbosity is 2, returns an Object with information about block <hash> and information about each transaction.
-// NOTE: This is for verbosity equals 1
-export const GetBlockFromHashResultDecoder = t.union([t.type({
-  tx: t.union([t.array(t.string), t.array(t.type({
+// If verbosity is 3, returns an Object with information about block <hash> and information about each transaction including the origin output for the inputs
+export const GetBlockFromHashResultDecoder = (() => {
+  const prevoutDecoder = t.type({
+    generated: t.boolean,
+    height: t.number,
+    value: t.number,
+    scriptPubKey: t.type({
+      asm: t.string,
+      desc: t.string,
+      hex: t.string,
+      address: t.union([t.string, t.undefined]),
+      type: t.string,
+    }),
+  });
+
+  const vinDecoder = t.array(t.type({
+    coinbase: t.union([t.string, t.undefined]),
+    vout: t.union([t.number, t.undefined]),
+    scriptSig: t.union([t.type({
+      asm: t.string,
+      hex: t.string,
+    }), t.undefined]),
+    txinwitness: t.union([t.array(t.string), t.undefined]),
+    sequence: t.union([t.number, t.undefined]),
+    prevout: t.union([prevoutDecoder, t.undefined])
+  }));
+
+  const voutDecoder = t.array(t.type({
+    value: t.number,
+    n: t.number,
+    scriptPubKey: t.type({
+      asm: t.string,
+      desc: t.string,
+      hex: t.string,
+      address: t.union([t.string, t.undefined]),
+      type: t.string,
+    }),
+  }));
+
+  const txDecoder = t.union([t.array(t.string), t.array(t.type({
     txid: t.string,
     hash: t.string,
     version: t.number,
@@ -146,30 +183,15 @@ export const GetBlockFromHashResultDecoder = t.union([t.type({
     vsize: t.number,
     weight: t.number,
     locktime: t.number,
-    vin: t.array(t.type({
-      coinbase: t.union([t.string, t.undefined]),
-      vout: t.union([t.number, t.undefined]),
-      scriptSig: t.union([t.type({
-        asm: t.string,
-        hex: t.string,
-      }), t.undefined]),
-      txinwitness: t.union([t.array(t.string), t.undefined]),
-      sequence: t.union([t.number, t.undefined]),
-    })),
-    vout: t.array(t.type({
-      value: t.number,
-      n: t.number,
-      scriptPubKey: t.type({
-        asm: t.string,
-        desc: t.string,
-        hex: t.string,
-        address: t.union([t.string, t.undefined]),
-        type: t.string,
-      }),
-    }))
-  }))]),
-  height: t.number,
-}), t.string]);
+    vin: vinDecoder,
+    vout: voutDecoder
+  }))]);
+
+  return t.union([t.type({
+    tx: txDecoder,
+    height: t.number,
+  }), t.string]);
+})();
 
 export type GetBlockFromHashResult = t.TypeOf<
   typeof GetBlockFromHashResultDecoder
