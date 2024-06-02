@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import createDebug from 'debug';
-import { throwIfErrorInResponseDataWithExtraProps, maybeShortenErrorMessage } from './utils';
+import { throwIfErrorInResponseDataWithExtraProps, maybeShortenErrorMessage } from './utils.js';
 
 const debug = createDebug('bitcoin-json-rpc');
 

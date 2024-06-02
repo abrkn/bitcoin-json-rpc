@@ -1,6 +1,6 @@
-import BitcoinJsonRpc from './BitcoinJsonRpc';
-export * from './json-rpc';
-export * from './types';
-export * from './BitcoinJsonRpcError';
-export * as decoders from './schemas';
+import BitcoinJsonRpc from './BitcoinJsonRpc.js';
+export * from './json-rpc.js';
+export * from './types.js';
+export * from './BitcoinJsonRpcError.js';
+export * as schemas from './schemas.js';
 export default BitcoinJsonRpc;

@@ -4,9 +4,10 @@
     "module": "commonjs",
     "lib": ["es2017"],
     "declaration": true,
-    "outDir": "dist",
+    "outDir": "dist/cjs",
     "strict": true,
     "esModuleInterop": true
   },
+  "include": ["src/index.ts"],
   "exclude": ["node_modules", "dist"]
 }

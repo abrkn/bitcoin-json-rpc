@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import delay from 'delay';
 import createDebug from 'debug';
-import { CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode } from './types';
-import { jsonRpcCmd } from './json-rpc';
-import { PURE_METHODS, getWasExecutedFromError, getShouldRetry } from './utils';
-import { BitcoinJsonRpcError } from './BitcoinJsonRpcError';
-import * as schemas from './schemas';
+import { CreateBitcoinJsonRpcOptions, BitcoinFeeEstimateMode } from './types.js';
+import { jsonRpcCmd } from './json-rpc.js';
+import { PURE_METHODS, getWasExecutedFromError, getShouldRetry } from './utils.js';
+import { BitcoinJsonRpcError } from './BitcoinJsonRpcError.js';
+import * as schemas from './schemas.js';
 
 const MAX_ATTEMPTS = 5;
 const DELAY_BETWEEN_ATTEMPTS = 5000;
