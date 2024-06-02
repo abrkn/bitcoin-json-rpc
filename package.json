@@ -16,7 +16,6 @@
   "devDependencies": {
     "@types/debug": "4.1.5",
     "@types/jest": "25.2.1",
-    "@types/lodash": "4.14.149",
     "@types/node": "12.12.35",
     "jest": "25.3.0",
     "ts-jest": "25.4.0",
@@ -27,7 +26,6 @@
     "debug": ">=4.1.1",
     "delay": ">=4.3.0 <6",
     "fp-ts": ">=2.5.3",
-    "io-ts": ">=2.2.0",
-    "lodash": ">=4.17.21"
+    "io-ts": ">=2.2.0"
   }
 }

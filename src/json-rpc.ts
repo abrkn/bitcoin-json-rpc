@@ -1,4 +1,3 @@
-import { merge } from 'lodash';
 import axios, { AxiosResponse } from 'axios';
 import createDebug from 'debug';
 import { throwIfErrorInResponseDataWithExtraProps, maybeShortenErrorMessage } from './utils';
@@ -67,7 +66,7 @@ export const jsonRpcCmd: (url: string, method: string, params?: any) => Promise<
   if (result === undefined) {
     const dataAsText = typeof dataStrict === 'string' ? dataStrict : JSON.stringify(dataStrict);
 
-    throw merge(new Error(maybeShortenErrorMessage(`Result missing from ${dataAsText}`)), {
+    throw Object.assign(new Error(maybeShortenErrorMessage(`Result missing from ${dataAsText}`)), {
       data: {
         jsonRpcRequest: {
           url,

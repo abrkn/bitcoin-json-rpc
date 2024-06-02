@@ -1,4 +1,3 @@
-import { merge } from 'lodash';
 import createDebug from 'debug';
 import * as t from 'io-ts';
 import { ActuallyThrowReporter } from './ActuallyThrowReporter';
@@ -15,9 +14,9 @@ export function iotsDecode<A, I = unknown>(decoder: t.Decoder<I, A>, value: any)
   try {
     ActuallyThrowReporter.report(decoded);
   } catch (error) {
-    throw Object.assign(error, {
+    throw Object.assign((error as any), {
       data: {
-        ...error.data,
+        ...(error as any).data,
         value,
       },
     });
@@ -72,8 +71,8 @@ export const throwIfErrorInResponseDataWithExtraProps = (data: any, prevError: E
   try {
     throwIfErrorInResponseData(data, prevError);
   } catch (error) {
-    const mergedError = prevError ? mergeErrorStacks(error, prevError) : error;
-    throw merge(mergedError, props);
+    const mergedError = prevError ? mergeErrorStacks((error as any), prevError) : error as any;
+    throw Object.assign(mergedError, props);
   }
 };
 

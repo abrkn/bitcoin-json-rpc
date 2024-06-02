@@ -1,5 +1,3 @@
-import { merge } from 'lodash';
-
 export class BitcoinJsonRpcError extends Error {
   /**
    * Whether the command executed. true is definiyely yes, false if definitely no, else null
@@ -12,7 +10,7 @@ export class BitcoinJsonRpcError extends Error {
     super(inner.message);
 
     this.executed = executed;
-    this.data = merge(
+    this.data = Object.assign(
       {},
       inner.data,
       {
