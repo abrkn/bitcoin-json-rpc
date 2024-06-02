@@ -120,3 +120,5 @@ README.md
 .gitignore
 tsconfig.json
 jest.config.*
+
+package-lock.json
