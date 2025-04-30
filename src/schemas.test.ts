@@ -1,4 +1,4 @@
-import { getRawTransactionAsObjectResultOutputSchema } from './schemas';
+import { getRawTransactionAsObjectResultOutputSchema, liquidGetTransactionResultSchema } from './schemas';
 
 describe('getRawTransactionAsObjectResultOutputSchema', () => {
   it('should support Litecoin mimblewimble output 1', () => {
@@ -111,4 +111,44 @@ describe('getRawTransactionAsObjectResultOutputSchema', () => {
 
       getRawTransactionAsObjectResultOutputSchema.parse(value);
   });
+});
+
+it("should parse liquid tx with blinders", () => {
+  const tx = {
+    amount: {
+      bitcoin: 0.1,
+    },
+    confirmations: 3,
+    blockhash:
+      "83796fb45blockhash",
+    blockheight: 3355294,
+    blockindex: 2,
+    blocktime: 1746002050,
+    txid: "254betxid",
+    walletconflicts: [],
+    time: 1746002045,
+    timereceived: 1746002045,
+    "bip125-replaceable": "no",
+    details: [
+      {
+        address: "ex1address",
+        category: "receive",
+        amount: 0.1,
+        amountblinder:
+          "b6809c8ab6c4288d5ce5398f80",
+        asset:
+          "6f0279e9ed041c3d710a9f57d0",
+        assetblinder:
+          "f6655e164700ec045bff521659",
+        label: "",
+        vout: 0,
+      },
+    ],
+    hex: "0251682002002505005050050",
+  };
+
+  const result = liquidGetTransactionResultSchema.parse(tx);
+
+  expect(result.details[0].amountblinder).toBe("b6809c8ab6c4288d5ce5398f80");
+  expect(result.details[0].assetblinder).toBe("f6655e164700ec045bff521659");
 });
