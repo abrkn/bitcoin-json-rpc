@@ -344,6 +344,10 @@ export const listUnspentSchema = z.array(
     spendable: z.boolean(),
     solvable: z.union([z.boolean(), z.undefined()]),
     safe: z.union([z.boolean(), z.undefined()]),
+    /**
+     * @description only present for Liquid network
+     */
+    asset: z.union([z.string(), z.undefined()]),
   }),
 );
 
